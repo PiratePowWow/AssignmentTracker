@@ -2,10 +2,9 @@ package com.theironyard.entities;
 
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -20,11 +19,24 @@ public class Student {
     private String name;
     @NotNull
     private String passwordHash;
+    @OneToMany
+    Set<StudentAssignment> studentAssignments;
 
     public Student(UUID id, String name, String passwordHash) {
         this.id = id;
         this.name = name;
         this.passwordHash = passwordHash;
+    }
+
+    public Set<StudentAssignment> getStudentAssignments() {
+        return studentAssignments;
+    }
+
+    public void setStudentAssignments(Set<StudentAssignment> studentAssignments) {
+        this.studentAssignments = studentAssignments;
+    }
+
+    public Student() {
     }
 
     public UUID getId() {

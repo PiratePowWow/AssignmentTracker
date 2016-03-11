@@ -21,17 +21,14 @@ public class Assignment {
     private double num;
     @NotNull
     private String name;
-    @NotNull
-    private boolean isComplete;
-    @ManyToOne
-    private Student student;
 
-    public Assignment(UUID id, double num, String name, boolean isComplete, Student student) {
+    public Assignment(UUID id, double num, String name) {
         this.id = id;
         this.num = num;
         this.name = name;
-        this.isComplete = isComplete;
-        this.student = student;
+    }
+
+    public Assignment() {
     }
 
     public UUID getId() {
@@ -56,21 +53,5 @@ public class Assignment {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isComplete() {
-        return isComplete;
-    }
-
-    public void setComplete(boolean complete) {
-        isComplete = complete;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
     }
 }
