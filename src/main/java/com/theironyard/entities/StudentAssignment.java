@@ -4,6 +4,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -16,7 +17,7 @@ public class StudentAssignment {
     @Type(type="uuid-char")
     private UUID id;
     @NotNull
-    @OneToOne
+    @ManyToOne
     private Student student;
     @NotNull
     @OneToOne

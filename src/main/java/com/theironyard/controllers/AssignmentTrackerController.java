@@ -15,10 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by PiratePowWow on 3/10/16.
@@ -31,24 +28,21 @@ public class AssignmentTrackerController {
     AssignmentRepository assignments;
     @Autowired
     StudentAssignmentRepository studentAssignments;
-    @PostConstruct
-    public void populateDatabase() throws FileNotFoundException, PasswordStorage.CannotPerformOperationException {
-        File c = new File("students.csv");
-        Scanner s = new Scanner(c);
-        s.nextLine();
-        while(s.hasNext()){
-            String a = s.nextLine();
-            students.save(new Student(java.util.UUID.randomUUID(), a, PasswordStorage.createHash("tracker")));
-        }
-        File p = new File("assignments.csv");
-        Scanner pur = new Scanner(p);
-        pur.nextLine();
-        while(pur.hasNext()){
-            String[] pr = pur.nextLine().split(",");
-                assignments.save(new Assignment(java.util.UUID.randomUUID(), Double.valueOf(pr[0]), pr[1]));
-        }
-
-    }
+//    @PostConstruct
+//    public void populateDatabase() throws FileNotFoundException, PasswordStorage.CannotPerformOperationException {
+//        File c = new File("students.csv");
+//        Scanner s = new Scanner(c);
+//        while(s.hasNext()){
+//            String a = s.nextLine();
+//            students.save(new Student(java.util.UUID.randomUUID(), a, PasswordStorage.createHash("tracker")));
+//        }
+//        File p = new File("assignments.csv");
+//        Scanner pur = new Scanner(p);
+//        while(pur.hasNext()){
+//            String[] pr = pur.nextLine().split(",");
+//                assignments.save(new Assignment(java.util.UUID.randomUUID(), Double.valueOf(pr[0]), pr[1]));
+//        }
+//    }
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String home(){
         return "home";
