@@ -1,5 +1,25 @@
 <html>
 <body>
-
+{{^student}}
+<form action="/login" method="post">
+    <input type="text" placeholder="Enter A User" name="name" required>
+    <input type="password" placeholder="Enter Your Password" name="password" required>
+    <button type="submit">Login</button>
+</form>
+<br>
+{{/student}}
+{{#student}}
+Welcome {{name}}<br>
+{{/student}}
+{{#students}}
+{{name}}
+{{/students}}
+<br>
+{{#assignments}}
+{{num}} {{name}}<form action="/add-assignment" method="post">
+    <input hidden name="assignmentId" type="number"  value="{{id}}">
+    <button type="submit">ADD</button>
+</form> <br>
+{{/assignments}}
 </body>
 </html>

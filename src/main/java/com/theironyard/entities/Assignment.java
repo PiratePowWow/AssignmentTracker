@@ -2,11 +2,9 @@ package com.theironyard.entities;
 
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -21,12 +19,22 @@ public class Assignment {
     private double num;
     @NotNull
     private String name;
+//    @ManyToMany
+//    Set<Student> students;
 
     public Assignment(UUID id, double num, String name) {
         this.id = id;
         this.num = num;
         this.name = name;
     }
+
+//    public Set<Student> getStudents() {
+//        return students;
+//    }
+//
+//    public void setStudents(Set<Student> students) {
+//        this.students = students;
+//    }
 
     public Assignment() {
     }

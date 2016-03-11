@@ -3,15 +3,18 @@ package com.theironyard.controllers;
 import com.theironyard.entities.Assignment;
 import com.theironyard.entities.Student;
 import com.theironyard.services.AssignmentRepository;
-import com.theironyard.services.StudentAssignmentRepository;
+//import com.theironyard.services.StudentAssignmentRepository;
 import com.theironyard.services.StudentRepository;
 import com.theironyard.utils.PasswordStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.UUID;
 import javax.annotation.PostConstruct;
+import javax.persistence.OrderBy;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,8 +29,8 @@ public class AssignmentTrackerController {
     StudentRepository students;
     @Autowired
     AssignmentRepository assignments;
-    @Autowired
-    StudentAssignmentRepository studentAssignments;
+//    @Autowired
+//    StudentAssignmentRepository studentAssignments;
 //    @PostConstruct
 //    public void populateDatabase() throws FileNotFoundException, PasswordStorage.CannotPerformOperationException {
 //        File c = new File("students.csv");
@@ -44,31 +47,42 @@ public class AssignmentTrackerController {
 //        }
 //    }
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String home(){
+    public String home(Model model, HttpSession session){
+        Student student = (Student) session.getAttribute("student");
+        model.addAttribute("student", student);
+        model.addAttribute("students", students.findAllByOrderByNameAsc());
+        model.addAttribute("assignments", assignments.findAllByOrderByNumAsc());
         return "home";
     }
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public String login(){
+    public String login(HttpSession session, String name, String password) throws Exception {
+        if(!PasswordStorage.verifyPassword(password, students.findStudentByName(name).getPasswordHash())){
+            throw new Exception("Incorrect Password");
+        }
+        session.setAttribute("student", students.findStudentByName(name));
         return "redirect:/";
     }
     @RequestMapping(path = "/change-password", method = RequestMethod.POST)
-    public String changePassword(){
+    public String changePassword(HttpSession session){
         return "redirect:/";
     }
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
-    public String logout(){
+    public String logout(HttpSession session){
         return "redirect:/";
     }
     @RequestMapping(path = "/add-assignment", method = RequestMethod.POST)
-    public String addAssignment(){
+    public String addAssignment(HttpSession session, UUID assignmentId){
+        Student student = (Student) session.getAttribute("student");
+        student.getAssignments().add(assignments.findOne(assignmentId));
+        students.save(student);
         return "redirect:/";
     }
     @RequestMapping(path = "/delete", method = RequestMethod.POST)
-    public String delete(){
+    public String delete(HttpSession session){
         return "redirect:/";
     }
     @RequestMapping(path = "/update", method = RequestMethod.POST)
-    public String update(){
+    public String update(HttpSession session){
         return "redirect:/";
     }
 }

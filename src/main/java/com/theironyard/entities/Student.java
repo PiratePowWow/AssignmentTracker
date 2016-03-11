@@ -19,8 +19,8 @@ public class Student {
     private String name;
     @NotNull
     private String passwordHash;
-    @OneToMany
-    Set<StudentAssignment> studentAssignments;
+    @ManyToMany
+    Set<Assignment> assignments;
 
     public Student(UUID id, String name, String passwordHash) {
         this.id = id;
@@ -28,12 +28,12 @@ public class Student {
         this.passwordHash = passwordHash;
     }
 
-    public Set<StudentAssignment> getStudentAssignments() {
-        return studentAssignments;
+    public Set<Assignment> getAssignments() {
+        return assignments;
     }
 
-    public void setStudentAssignments(Set<StudentAssignment> studentAssignments) {
-        this.studentAssignments = studentAssignments;
+    public void setAssignments(Set<Assignment> assignments) {
+        this.assignments = assignments;
     }
 
     public Student() {
