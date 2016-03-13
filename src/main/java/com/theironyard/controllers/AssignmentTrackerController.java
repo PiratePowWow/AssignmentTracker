@@ -48,7 +48,9 @@ public class AssignmentTrackerController {
 //    }
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String home(Model model, HttpSession session){
-        Student student = (Student) session.getAttribute("student");
+        UUID id = (UUID) session.getAttribute("student");
+        Student student = students.findOne(id);
+        model.addAttribute("completed", student);
         model.addAttribute("student", student);
         model.addAttribute("students", students.findAllByOrderByNameAsc());
         model.addAttribute("assignments", assignments.findAllByOrderByNumAsc());
@@ -59,7 +61,7 @@ public class AssignmentTrackerController {
         if(!PasswordStorage.verifyPassword(password, students.findStudentByName(name).getPasswordHash())){
             throw new Exception("Incorrect Password");
         }
-        session.setAttribute("student", students.findStudentByName(name));
+        session.setAttribute("student", students.findStudentByName(name).getId());
         return "redirect:/";
     }
     @RequestMapping(path = "/change-password", method = RequestMethod.POST)
@@ -71,9 +73,9 @@ public class AssignmentTrackerController {
         return "redirect:/";
     }
     @RequestMapping(path = "/add-assignment", method = RequestMethod.POST)
-    public String addAssignment(HttpSession session, UUID assignmentId){
+    public String addAssignment(HttpSession session, String assignmentId){
         Student student = (Student) session.getAttribute("student");
-        student.getAssignments().add(assignments.findOne(assignmentId));
+        student.getAssignments().add(assignments.findOne(UUID.fromString(assignmentId)));
         students.save(student);
         return "redirect:/";
     }

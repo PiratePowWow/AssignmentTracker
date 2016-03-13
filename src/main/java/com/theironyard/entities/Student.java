@@ -19,7 +19,7 @@ public class Student {
     private String name;
     @NotNull
     private String passwordHash;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<Assignment> assignments;
 
     public Student(UUID id, String name, String passwordHash) {

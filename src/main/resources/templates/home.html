@@ -17,7 +17,7 @@ Welcome {{name}}<br>
 <br>
 {{#assignments}}
 {{num}} {{name}}<form action="/add-assignment" method="post">
-    <input hidden name="assignmentId" type="number"  value="{{id}}">
+    <input hidden name="assignmentId" type="text"  value="{{id}}">
     <button type="submit">ADD</button>
 </form> <br>
 {{/assignments}}
