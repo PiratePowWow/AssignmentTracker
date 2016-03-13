@@ -12,13 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
-import javax.annotation.PostConstruct;
-import javax.persistence.OrderBy;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.*;
 
 /**
  * Created by PiratePowWow on 3/10/16.
@@ -49,11 +47,29 @@ public class AssignmentTrackerController {
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String home(Model model, HttpSession session){
         UUID id = (UUID) session.getAttribute("student");
-        Student student = students.findOne(id);
-        model.addAttribute("completed", student);
-        model.addAttribute("student", student);
-        model.addAttribute("students", students.findAllByOrderByNameAsc());
-        model.addAttribute("assignments", assignments.findAllByOrderByNumAsc());
+        if(id!=null) {
+            Student student = students.findOne(id);
+            List<Assignment> completed = student.getAssignments();
+            Collections.sort(completed);
+            ArrayList<Assignment> openAssignments = new ArrayList<Assignment>();
+            for(Assignment eachAssignment: assignments.findAllByOrderByNumAsc()){
+                boolean complete = false;
+                for(Assignment completedAssignment: completed){
+                    if (completedAssignment.getNum()==eachAssignment.getNum()){
+                        complete = true;
+                    }
+                }
+                if (!complete){
+                    openAssignments.add(eachAssignment);
+                }
+            }
+            model.addAttribute("assignments", openAssignments);
+            model.addAttribute("completed", completed);
+            model.addAttribute("student", student);
+        }else{
+            model.addAttribute("assignments", assignments.findAllByOrderByNumAsc());
+            model.addAttribute("students", students.findAllByOrderByNameAsc());
+        }
         return "home";
     }
     @RequestMapping(path = "/login", method = RequestMethod.POST)
@@ -74,7 +90,7 @@ public class AssignmentTrackerController {
     }
     @RequestMapping(path = "/add-assignment", method = RequestMethod.POST)
     public String addAssignment(HttpSession session, String assignmentId){
-        Student student = (Student) session.getAttribute("student");
+        Student student = students.findOne((UUID) session.getAttribute("student"));
         student.getAssignments().add(assignments.findOne(UUID.fromString(assignmentId)));
         students.save(student);
         return "redirect:/";

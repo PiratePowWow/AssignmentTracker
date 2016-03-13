@@ -11,7 +11,7 @@ import java.util.UUID;
  * Created by PiratePowWow on 3/10/16.
  */
 @Entity
-public class Assignment {
+public class Assignment implements Comparable{
     @Id
     @Type(type="uuid-char")
     private UUID id;
@@ -61,5 +61,17 @@ public class Assignment {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Assignment a = (Assignment) o;
+        if(num == a.num){
+            return 0;
+        }else if(num < a.num){
+            return -1;
+        }else{
+            return 1;
+        }
     }
 }

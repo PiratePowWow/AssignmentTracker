@@ -1,4 +1,5 @@
 <html>
+<head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"></head>
 <body>
 {{^student}}
 <form action="/login" method="post">
@@ -15,11 +16,31 @@ Welcome {{name}}<br>
 {{name}}
 {{/students}}
 <br>
-{{#assignments}}
-{{num}} {{name}}<form action="/add-assignment" method="post">
-    <input hidden name="assignmentId" type="text"  value="{{id}}">
-    <button type="submit">ADD</button>
-</form> <br>
-{{/assignments}}
+<table class="table table-hover table-striped table-condensed table-bordered">
+    <tr>
+        <th>Completed Assignments</th>
+        <th>Open Assignments</th>
+    </tr>
+    <tr valign="top">
+        <td>
+            {{#completed}}
+            <form action="/remove-assignment" method="post" class="form-inline">
+                {{num}} {{name}}
+                <input hidden name="assignmentId" type="text"  value="{{id}}">
+                <button type="submit">Revert</button>
+            </form><br>
+            {{/completed}}
+        </td>
+        <td>
+            {{#assignments}}
+            <form action="/add-assignment" method="post" class="form-inline">
+                {{num}} {{name}}
+                <input hidden name="assignmentId" type="text"  value="{{id}}">
+                <button type="submit">Move To Completed</button>
+            </form> <br>
+            {{/assignments}}
+        </td>
+    </tr>
+</table>
 </body>
 </html>

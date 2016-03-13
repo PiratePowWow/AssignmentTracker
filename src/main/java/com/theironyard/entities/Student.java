@@ -4,7 +4,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -20,7 +21,7 @@ public class Student {
     @NotNull
     private String passwordHash;
     @ManyToMany(fetch = FetchType.EAGER)
-    Set<Assignment> assignments;
+    List<Assignment> assignments;
 
     public Student(UUID id, String name, String passwordHash) {
         this.id = id;
@@ -28,11 +29,11 @@ public class Student {
         this.passwordHash = passwordHash;
     }
 
-    public Set<Assignment> getAssignments() {
+    public List<Assignment> getAssignments() {
         return assignments;
     }
 
-    public void setAssignments(Set<Assignment> assignments) {
+    public void setAssignments(List<Assignment> assignments) {
         this.assignments = assignments;
     }
 
