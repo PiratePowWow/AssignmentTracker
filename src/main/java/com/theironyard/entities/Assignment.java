@@ -16,6 +16,7 @@ public class Assignment implements Comparable{
     @Type(type="uuid-char")
     private UUID id;
     @NotNull
+    @Column(unique = true)
     private double num;
     @NotNull
     private String name;

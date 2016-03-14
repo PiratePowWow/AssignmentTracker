@@ -10,12 +10,15 @@
 <br>
 {{/student}}
 {{#student}}
-Welcome {{name}}<br>
+<form action="/logout" method="post" class="form-inline">
+    Welcome {{name}}<button type="submit">Logout</button>
+</form> <br>
 {{/student}}
 {{#students}}
 {{name}}
 {{/students}}
 <br>
+<div width="60%">
 <table class="table table-hover table-striped table-condensed table-bordered">
     <tr>
         <th>Completed Assignments</th>
@@ -42,5 +45,6 @@ Welcome {{name}}<br>
         </td>
     </tr>
 </table>
+</div>
 </body>
 </html>

@@ -86,6 +86,7 @@ public class AssignmentTrackerController {
     }
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
     public String logout(HttpSession session){
+        session.invalidate();
         return "redirect:/";
     }
     @RequestMapping(path = "/add-assignment", method = RequestMethod.POST)
@@ -95,8 +96,11 @@ public class AssignmentTrackerController {
         students.save(student);
         return "redirect:/";
     }
-    @RequestMapping(path = "/delete", method = RequestMethod.POST)
-    public String delete(HttpSession session){
+    @RequestMapping(path = "/remove-assignment", method = RequestMethod.POST)
+    public String removeAssignment(HttpSession session, String assignmentId){
+        Student student = students.findOne((UUID) session.getAttribute("student"));
+        student.getAssignments().remove(assignments.findOne(UUID.fromString(assignmentId)));
+        students.save(student);
         return "redirect:/";
     }
     @RequestMapping(path = "/update", method = RequestMethod.POST)
