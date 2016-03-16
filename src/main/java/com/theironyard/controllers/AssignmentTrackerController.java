@@ -7,11 +7,14 @@ import com.theironyard.services.AssignmentRepository;
 import com.theironyard.services.StudentRepository;
 import com.theironyard.utils.PasswordStorage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +48,9 @@ public class AssignmentTrackerController {
 //        }
 //    }
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String home(Model model, HttpSession session){
+    public String home(Model model, HttpSession session, Integer page){
+        page = (page==null)?0:page;
+        PageRequest pr = new PageRequest(page, 8);
         UUID id = (UUID) session.getAttribute("student");
         if(id!=null) {
             Student student = students.findOne(id);
@@ -67,9 +72,14 @@ public class AssignmentTrackerController {
             model.addAttribute("completed", completed);
             model.addAttribute("student", student);
         }else{
-            model.addAttribute("assignments", assignments.findAllByOrderByNumAsc());
+            Page<Assignment> p = assignments.findAllByOrderByNumAsc(pr);
+            model.addAttribute("assignments", p);
             model.addAttribute("students", students.findAllByOrderByNameAsc());
+            model.addAttribute("showNext", p.hasNext());
+            model.addAttribute("showPrev", page != 0);
         }
+        model.addAttribute("nextPage", page+1);
+        model.addAttribute("prevPage", page-1);
         return "home";
     }
     @RequestMapping(path = "/login", method = RequestMethod.POST)
